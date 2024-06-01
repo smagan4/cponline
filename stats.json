@@ -4,15 +4,20 @@
             "id": 10,
             "name": "Number of hands",
             "type": "int"
+        },
+        "no_of_passes": {
+            "id": 11,
+            "name": "Number of players who passed",
+            "type": "int"
+        },
+        "no_of_cards_in_round":{
+            "id": 12,
+            "name": "Number of cards played in round",
+            "type": "int"
         }
     },
     
     "player" : {
-        "player_pass_turn":{
-            "id": 12,
-            "name": "player passes",
-            "type": "int"
-        },
         "player_round_win" :{
             "id"   : 13,
             "name" : "player round won",

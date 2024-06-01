@@ -3,7 +3,7 @@
 <!-- 
 --------
 -- BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
--- heartsOldmanwookie implementation : © <Your name here> <Your email address here>
+-- cponline implementation : © <Your name here> <Your email address here>
 -- 
 -- This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
 -- See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -48,7 +48,7 @@
 
 <script type="text/javascript">
 
-// Javascript HTML templates
+// Javascript HTML templates - changed below from play_id to player_id
 var jstpl_cardontable = '<div class="cardontable" id="cardontable_${play_id}" style="background-position:-${x}px -${y}px">\
                         </div>';
 var jstpl_player_board = '<div class="cp_board">\

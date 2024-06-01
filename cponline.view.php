@@ -1,58 +1,101 @@
 <?php
-
+/**
+ *------
+ * BGA framework: Gregory Isabelli & Emmanuel Colin & BoardGameArena
+ * cponline implementation : © <Your name here> <Your email address here>
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * cponline.view.php
+ *
+ * This is your "view" file.
+ *
+ * The method "build_page" below is called each time the game interface is displayed to a player, ie:
+ * _ when the game starts
+ * _ when a player refreshes the game page (F5)
+ *
+ * "build_page" method allows you to dynamically modify the HTML generated for the game interface. In
+ * particular, you can set here the values of variables elements defined in cponline_cponline.tpl (elements
+ * like {MY_VARIABLE_ELEMENT}), and insert HTML block elements (also defined in your HTML template file)
+ *
+ * Note: if the HTML of your game interface is always the same, you don't have to place anything here.
+ *
+ */
+//const APP_BASE_PATH = 'view/common/game.view.php';          //put in to stop intellephense errors REMOVE BEFORE ALPHA?
+require_once( APP_BASE_PATH."view/common/game.view.php" );
   
-  require_once( APP_BASE_PATH."view/common/game.view.php" );
-  
-  class view_cponline_cponline extends game_view
-  {
-    function getGameName() {
-        //changed from CPOnline
+class view_cponline_cponline extends game_view
+{
+    protected function getGameName()
+    {
+        // Used for translations and stuff. Please do not modify.
         return "cponline";
-    }    
+    }
+    
   	function build_page( $viewArgs )
   	{		
-        global $g_user;
   	    // Get players & players number
-        $players = [];
-        $allPlayers = $this->game->loadPlayersBasicInfos();
-        $current_player_id = $g_user->get_id();
-        $nb_cards = $this->game->cards->countCardsByLocationArgs('hand');
-        $players_nbr = count( $allPlayers );
-
-        if (array_key_exists ($current_player_id, $allPlayers)) {
-          $players[$current_player_id] = $allPlayers[$current_player_id];
-          for ($i = 0 ; $i < $players_nbr; $i++) {
-            $current_player_id = $this->game->getPlayerAfter( $current_player_id );
-            $players[$current_player_id] = $allPlayers[$current_player_id];
-          }
-        } else {
-          $players = $allPlayers;
-        }
+        $players = $this->game->loadPlayersBasicInfos();
+        $players_nbr = count( $players );
 
         /*********** Place your code below:  ************/
 
         $template = self::getGameName() . "_" . self::getGameName();
-
-        $i = 1;
+        
+        $directions = array( 'S', 'W', 'N', 'E' );
+        
         // this will inflate our player block with actual players data
-        $this->page->begin_block($template, "player");
+        $this->page->begin_block($template, "playerhandblock");
         foreach ( $players as $player_id => $info ) {
-          $this->page->insert_block("player", [
-            "PLAYER_ID" => $player_id,
-            "PLAYER_NAME" => $players [$player_id] ['player_name'],
-            "PLAYER_COLOR" => $players [$player_id] ['player_color'],
-            "NB_CARDS" => isset($nb_cards[$player_id]) ? isset($nb_cards[$player_id]) : 0,
-            "NB_PLAYER" => $players_nbr,
-            "PLACE_ID" => $i,
-            "ROUND" => self::_("Round"),
-          ]);
-          $i++;
+            $dir = array_shift($directions);
+            $this->page->insert_block("playerhandblock", array ("PLAYER_ID" => $player_id,
+                    "PLAYER_NAME" => $players [$player_id] ['player_name'],
+                    "PLAYER_COLOR" => $players [$player_id] ['player_color'],
+                    "DIR" => $dir ));
         }
+        // this will make our My Hand text translatable
+        $this->tpl['MY_HAND'] = self::_(" ");
+        
+        /*
+        
+        // Examples: set the value of some element defined in your tpl file like this: {MY_VARIABLE_ELEMENT}
 
-        $this->tpl['MY_HAND'] = self::_("My hand");
+        // Display a specific number / string
+        $this->tpl['MY_VARIABLE_ELEMENT'] = $number_to_display;
+
+        // Display a string to be translated in all languages: 
+        $this->tpl['MY_VARIABLE_ELEMENT'] = self::_("A string to be translated");
+
+        // Display some HTML content of your own:
+        $this->tpl['MY_VARIABLE_ELEMENT'] = self::raw( $some_html_code );
+        
+        */
+        
+        /*
+        
+        // Example: display a specific HTML block for each player in this game.
+        // (note: the block is defined in your .tpl file like this:
+        //      <!-- BEGIN myblock --> 
+        //          ... my HTML code ...
+        //      <!-- END myblock --> 
+        
+
+        $this->page->begin_block( "cponline_cponline", "myblock" );
+        foreach( $players as $player )
+        {
+            $this->page->insert_block( "myblock", array( 
+                                                    "PLAYER_NAME" => $player['player_name'],
+                                                    "SOME_VARIABLE" => $some_value
+                                                    ...
+                                                     ) );
+        }
+        
+        */
+
+
 
         /*********** Do not change anything below this line  ************/
   	}
-  }
-  
-
+}
