@@ -1,0 +1,22 @@
+{
+    "table" : {
+        "hand_number": {
+            "id": 10,
+            "name": "Number of hands",
+            "type": "int"
+        }
+    },
+    
+    "player" : {
+        "player_pass_turn":{
+            "id": 12,
+            "name": "player passes",
+            "type": "int"
+        },
+        "player_round_win" :{
+            "id"   : 13,
+            "name" : "player round won",
+            "type" : "int"
+        }
+    }
+}
